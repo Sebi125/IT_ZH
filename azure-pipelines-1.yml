@@ -1,0 +1,21 @@
+trigger:
+- main  # Trigger minden változás esetén a 'main' branch-en
+
+pool:
+  vmImage: 'ubuntu-latest'  # Futási környezet
+
+steps:
+# HTML fájlok másolása az artifact mappába
+- task: CopyFiles@2
+  displayName: "Copy HTML Files"
+  inputs:
+    SourceFolder: '.'
+    Contents: 'index.html'  # Csak az index.html fájlt másoljuk
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+# Artifactok publikálása (statikus webhelyhez)
+- task: PublishBuildArtifacts@1
+  displayName: "Publish HTML Artifact"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'html-site'
